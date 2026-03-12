@@ -163,7 +163,16 @@ namespace Dumpers::Schemas {
 
 				FOR_EACH_MAP(typeScope->m_DeclaredClasses.m_Map, iter)
 				{
-					const auto classInfo = typeScope->m_DeclaredClasses.m_Map.Element(iter)->m_pClassInfo;
+							const auto schemaClass = typeScope->m_DeclaredClasses.m_Map.Element(iter);
+							const auto classInfo = schemaClass->m_pClassInfo;
+							if (!classInfo)
+							{
+								spdlog::warn("Null classInfo: {}::{}", typeScope->GetScopeName(), schemaClass->m_sTypeName.Get());
+								continue;
+							}
+
+					if (!classInfo)
+						continue;
 
             spdlog::trace("Dumping class: '{}'", classInfo->m_pszName);
 
@@ -252,7 +261,13 @@ namespace Dumpers::Schemas {
 
 				FOR_EACH_MAP(typeScope->m_DeclaredEnums.m_Map, iter)
 				{
-						const auto enumInfo = typeScope->m_DeclaredEnums.m_Map.Element(iter)->m_pEnumInfo;
+						const auto schemaEnum = typeScope->m_DeclaredEnums.m_Map.Element(iter);
+						const auto enumInfo = schemaEnum->m_pEnumInfo;
+						if (!enumInfo)
+						{
+							spdlog::warn("Null enumInfo {}::{}", typeScope->GetScopeName(), schemaEnum->m_sTypeName.Get());
+							continue;
+						}
 
             builder.json_property_name(enumInfo->m_pszName).begin_json_object_value();
 
