@@ -164,21 +164,23 @@ namespace Dumpers::Schemas {
 				FOR_EACH_MAP(typeScope->m_DeclaredClasses.m_Map, iter)
 				{
 							const auto schemaClass = typeScope->m_DeclaredClasses.m_Map.Element(iter);
+							if (!schemaClass) continue;
+
 							const auto classInfo = schemaClass->m_pClassInfo;
 							if (!classInfo)
 							{
-								spdlog::warn("Null classInfo: {}::{}", typeScope->GetScopeName(), schemaClass->m_sTypeName.Get());
+								builder.json_property_name(schemaClass->m_sTypeName.Get()).begin_json_object_value();
+								builder.json_property_name("type").json_string_value("declared_type");
+								builder.end_json_object();
 								continue;
 							}
 
-					if (!classInfo)
-						continue;
+							const char* className = classInfo->m_pszName ? classInfo->m_pszName : "UnknownClass";
+							builder.json_property_name(className).begin_json_object_value();
 
             spdlog::trace("Dumping class: '{}'", classInfo->m_pszName);
 
-            builder.json_property_name(classInfo->m_pszName).begin_json_object_value();
-
-            if (classInfo->m_nBaseClassCount >= 1) {
+            if (classInfo->m_nBaseClassCount >= 0 && classInfo->m_pBaseClasses && classInfo->m_pBaseClasses[0].m_pClass)  {
                 builder.json_property_name("parent").
                         json_string_value(classInfo->m_pBaseClasses[0].m_pClass->m_pszName);
             }
