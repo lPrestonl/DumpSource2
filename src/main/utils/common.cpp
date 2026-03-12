@@ -19,18 +19,6 @@ void ExitError(const char* pMsg, ...)
 	exit(1);
 }
 
-/* tier0 stub */
-
-void CThreadSpinRWLock::LockForRead(const char* pFileName, int nLine)
-{
-	// STUB
-}
-
-void CThreadSpinRWLock::UnlockRead(const char* pFileName, int nLine)
-{
-	// STUB
-}
-
 LoggingResponse_t LoggingSystem_LogAssert(const char* pMessageFormat, ...)
 {
 	return LR_ABORT;
@@ -81,15 +69,9 @@ void CUtlString::Trim(const char*) {
 	// STUB
 }
 
-#ifdef GAME_CS2
 CUtlBuffer::CUtlBuffer(const void*, int, CUtlBuffer::BufferFlags_t) {
 	// STUB
 }
-#else
-CUtlBuffer::CUtlBuffer(void const*, int, int) {
-	// STUB
-}
-#endif
 
 void ConMsg(const char*, ...) {
 	// STUB
